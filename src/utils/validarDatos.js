@@ -1,4 +1,4 @@
-const { generarHashpass } = require('./bcrypt');
+const { generarHashpass } = require('./indexUtils');
 
 const validarCorreoElectronico =(email)=>{
     // Expresión regular para validar el formato de un correo electrónico
@@ -7,6 +7,10 @@ const validarCorreoElectronico =(email)=>{
     // Verificar si el correo electrónico cumple con el formato
     return regex.test(email);
   }
+
+const validName=(name)=>{
+  //terminar
+}
   
 const esPassSegura=(pass)=>{
     // Verificar la longitud mínima
@@ -37,7 +41,7 @@ const esPassSegura=(pass)=>{
     // Si pasa todas las verificaciones, consideramos la pass segura
     return generarHashpass(pass);
   }
-  
+
 
   module.exports = {
     validarCorreoElectronico,
