@@ -1,6 +1,6 @@
 const { generarHashpass } = require('./indexUtils');
 
-const validarCorreoElectronico =(email)=>{
+const validEmail =(email)=>{
     // Expresión regular para validar el formato de un correo electrónico
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   
@@ -9,41 +9,32 @@ const validarCorreoElectronico =(email)=>{
   }
 
 const validName=(name)=>{
-  //terminar
+  console.log(name)
+    const caracteresProhibidos = /[<>]/;
+    // Verificar si el input es un string
+    if (typeof name !== 'string') return false;
+    // Verificar la longitud del string
+    if (name.length > 30) return false;
+    // Verificar si hay caracteres especiales que podrían indicar intento de inyección de código
+    if (caracteresProhibidos.test(name)) return false;
+    // Si todo está bien, el string es válido
+    return true;
 }
   
 const esPassSegura=(pass)=>{
-    // Verificar la longitud mínima
-    if (pass.length < 8) {
-      return false;
-    }
-  
-    // Verificar la presencia de al menos un número
-    if (!/\d/.test(pass)) {
-      return false;
-    }
-  
-    // Verificar la presencia de al menos una letra mayúscula
-    if (!/[A-Z]/.test(pass)) {
-      return false;
-    }
-  
-    // Verificar la presencia de al menos una letra minúscula
-    if (!/[a-z]/.test(pass)) {
-      return false;
-    }
-  
-    // Verificar la presencia de al menos un carácter especial
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(pass)) {
-      return false;
-    }
-  
-    // Si pasa todas las verificaciones, consideramos la pass segura
-    return generarHashpass(pass);
+    /*
+    (?=.*[A-Za-z]): Asegura que la contraseña contenga al menos una letra.
+    (?=.*\d): Asegura que la contraseña contenga al menos un dígito.
+    (?=.*[@$!%*?&]): Asegura que la contraseña contenga al menos un carácter especial, que puede ser cualquiera de los caracteres en @$!%*?&.
+    [A-Za-z\d@$!%*?&]{8,}: Acepta caracteres alfanuméricos y especiales, con una longitud mínima de 8 caracteres.
+    */
+    if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(pass)) return false;
+    return true;
   }
 
 
   module.exports = {
-    validarCorreoElectronico,
-    esPassSegura
+    validEmail,
+    esPassSegura,
+    validName
   };

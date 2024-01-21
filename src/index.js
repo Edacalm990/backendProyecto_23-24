@@ -1,22 +1,26 @@
 //usamos express como freamwork
 const express=require('express');
 const mongoose=require("mongoose")
-const bodyParser = require('body-parser')
-// create application/x-www-form-urlencoded parser
+const userRoutes=require("./routes/indexRoutes");
+const resError = require('./utils/resError');
+const { ClientError } = require('./utils/clientError');
 
 // usamos dtenv para las variables de entorno 
 require('dotenv').config()
 
 const app=express();
-
 // le asignamos una constante a las rutas de usuario
-const userRoutes=require("./routes/indexRoutes")
 
 // donde escucha el servidor 
 app.listen(process.env.PORT, ()=>console.log(process.env.PORT));
-
 //le ponemos un "prefijo" a las rutas
 app.use('/api',userRoutes)
+//le pasamos el manejador de errores en vez del suyo para no mostrar la ruta del error
+app.use((err,req,res,next)=>{
+  const statusCode=err.status || 500;
+  const message=err.message || 'Error interno del servidor';
+  resError(res,statusCode,message)
+})
 
 mongoose.connect(process.env.URI);
 const db = mongoose.connection;

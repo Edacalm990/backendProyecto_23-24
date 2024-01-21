@@ -1,5 +1,7 @@
-const {postCrearUsuario}=require("./postCrearUsuario");
+const {postCrearUsuario, getUserID, getUser}=require("./userController");
 
 module.exports = {
-    postCrearUsuario
+    postCrearUsuario,
+    getUserID,
+    getUser
 }

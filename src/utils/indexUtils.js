@@ -1,14 +1,17 @@
-const {validarCorreoElectronico,esPassSegura}=require("./validarDatos")
+const {validEmail,esPassSegura, validName}=require("./validarDatos")
 const { generarHashpass } = require('./bcrypt');
 const {catchAsync} =require('./catchAsync')
 const {response}=require('./response')
-const {ClienError}=require('./gestionErrores')
+const {ClientError}=require('./clientError')
+const {resError}=require('./resError')
 
 module.exports = {
-    validarCorreoElectronico,
+    validEmail,
+    validName,
     esPassSegura,
     generarHashpass,
     catchAsync,
     response,
-    ClienError
+    ClientError,
+    resError
 }
