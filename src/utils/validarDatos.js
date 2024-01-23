@@ -3,13 +3,26 @@ const { generarHashpass } = require('./indexUtils');
 const validEmail =(email)=>{
     // Expresión regular para validar el formato de un correo electrónico
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  
     // Verificar si el correo electrónico cumple con el formato
     return regex.test(email);
   }
 
+const validNumber=(dato)=>{
+    // Comprobamos si el dato es un número entero positivo
+    if (Number.isInteger(dato) && dato > 0) {
+      return true;
+    }
+  
+    // Comprobamos si el dato es un float positivo
+    if (typeof dato === "number" && dato > 0) {
+      return true;
+    }
+  
+    // En caso contrario, el dato no es positivo
+    return false;
+  }
+
 const validName=(name)=>{
-  console.log(name)
     const caracteresProhibidos = /[<>]/;
     // Verificar si el input es un string
     if (typeof name !== 'string') return false;
@@ -19,6 +32,16 @@ const validName=(name)=>{
     if (caracteresProhibidos.test(name)) return false;
     // Si todo está bien, el string es válido
     return true;
+}
+
+const validDate=(fecha)=>{
+  // Utilizamos el operador typeof para verificar si el dato es un objeto Date
+  return Object.prototype.toString.call(fecha) === '[object Date]';
+}
+
+const createDate=(fecha)=> {
+    const date = new Date(fecha);
+    return (!isNaN(date))?date:false;
 }
   
 const esPassSegura=(pass)=>{
@@ -36,5 +59,9 @@ const esPassSegura=(pass)=>{
   module.exports = {
     validEmail,
     esPassSegura,
-    validName
+    validName,
+    validNumber,
+    validDate,
+    createDate
+    
   };
