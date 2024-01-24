@@ -10,7 +10,14 @@ const postCrearUsuario = async (req, res) => {
         !esPassSegura(req.body.pass)
     ) throw new ClientError("Los datos no son correctos", 400);
     // Crear un nuevo usuario utilizando el modelo de Mongoose
-    const newUser = new User(req.body);
+    //const newUser = new User(req.body);
+    // genero una password segura
+    const passSegura=generarHashpass(req.body.pass);
+    const newUser=new User({
+        name: req.body.name,
+        email:req.body.email,
+        pass: await passSegura,
+    })
     // Guardar el usuario en la base de datos
     const savedUser = await newUser.save();
     // Enviar el usuario guardado como respuesta
@@ -36,9 +43,29 @@ const getUserID= async (req,res)=>{
     response(res, 200, usuario);
 }
 
+// borrar un usuario
+const UserDeleteId=async (req, res)=>{
+    const id = req.params.id;
+    const userDelete = await User.deleteOne({_id:id});
+    response(res, 200, userDelete);
+}
+
+// modificar el usuario
+const userPut=async (req, res)=>{
+    const filter = { _id: req.body.id};
+    const updateText={};
+    if(!!req.body.name) updateText['name']=req.body.name;
+    if(!!req.body.email && !validEmail(req.body.email) ) updateText['email']=req.body.name;
+    if(!!req.body.pass && !esPassSegura(req.body.pass) ) updateText['pass']=await generarHashpass(req.body.pass);
+    let doc = await User.findOneAndUpdate(filter, updateText);
+    response(res, 200, doc);
+}
+
 module.exports = {
     //gestiono los errores con catchAsync
     postCrearUsuario:catchAsync(postCrearUsuario),
     getUser:catchAsync(getUser),
-    getUserID:catchAsync(getUserID)
+    getUserID:catchAsync(getUserID),
+    UserDeleteId:catchAsync(UserDeleteId),
+    userPut:catchAsync(userPut)
 }
